@@ -20,7 +20,7 @@ def max_score(students: list[Student]) -> tuple[float, str]:
     for student in students:
         score.append(student["score"])
     for student in students:
-        if int(student["score"]) == int(max(score)):
+        if int(student["score"]) == max(int(score)):
             return float(max(score)), student["name"]
 
 def pass_score(students_score: list[int]) -> tuple[int, float]:
