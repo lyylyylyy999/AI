@@ -15,12 +15,12 @@ def total_students(students: list[Student]) -> int:
 def average_score(students_score: list[int]) -> float:
     return sum(students_score)/total_students(students_score)
 
-def max_score(students: list[Student]) -> tuple[int, str]:
+def max_score(students: list[Student]) -> tuple[float, str]:
     score = []
     for student in students:
         score.append(student["score"])
     for student in students:
-        if int(student["score"]) == max(score):
+        if int(student["score"]) == int(max(score)):
             return float(max(score)), student["name"]
 
 def pass_score(students_score: list[int]) -> tuple[int, float]:
