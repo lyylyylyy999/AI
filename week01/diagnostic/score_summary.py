@@ -12,18 +12,18 @@ def read_students(path: Path) -> list[Student]:
 def total_students(students: list[Student]) -> int:
     return len(students)
 
-def average_score(students_score: list) -> float:
+def average_score(students_score: list[int]) -> float:
     return sum(students_score)/total_students(students_score)
 
-def max_score(students: list[Student]) -> float:
+def max_score(students: list[Student]) -> tuple[int, str]:
     score = []
     for student in students:
         score.append(student["score"])
     for student in students:
-        if student["score"] == max(score):
+        if int(student["score"]) == max(score):
             return float(max(score)), student["name"]
 
-def pass_score(students_score: list) -> float:
+def pass_score(students_score: list[int]) -> tuple[int, float]:
     pass_students = []
     for i in students_score:
         if i>=60:
@@ -32,7 +32,7 @@ def pass_score(students_score: list) -> float:
             pass_students.append(0)
     return sum(pass_students), sum(pass_students)/len(pass_students)
 
-def average_major(students: list[Student]) -> dict:
+def average_major(students: list[Student]) -> dict[str, float]:
     major_stats = {}
     average = {}
     for student in students:
@@ -48,7 +48,7 @@ def average_major(students: list[Student]) -> dict:
         average[major] = (stats["total"] / stats["count"])
     return average
 
-def main():
+def main() -> None:
     path = Path(__file__).resolve().parent / "data" / "students.csv"
     students = read_students(path)
     total_student = total_students(students)
