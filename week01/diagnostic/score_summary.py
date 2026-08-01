@@ -13,15 +13,21 @@ def total_students(students: list[Student]) -> int:
     return len(students)
 
 def average_score(students_score: list[int]) -> float:
-    return sum(students_score)/total_students(students_score)
+    if not students_score:
+        raise ValueError("无法计算空列表的平均分")
+
+    return sum(students_score) / len(students_score)
 
 def max_score(students: list[Student]) -> tuple[float, str]:
-    score = []
-    for student in students:
-        score.append(student["score"])
-    for student in students:
-        if int(student["score"]) == max(int(score)):
-            return float(max(score)), student["name"]
+    if not students:
+        raise ValueError("无法从空列表中查找最高分")
+
+    top_student = max(
+        students,
+        key=lambda student: float(student["score"]),
+    )
+
+    return float(top_student["score"]), top_student["name"]
 
 def pass_score(students_score: list[int]) -> tuple[int, float]:
     pass_students = []
