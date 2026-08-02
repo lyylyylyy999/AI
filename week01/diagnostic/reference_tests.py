@@ -1,5 +1,7 @@
 """成绩摘要的 pytest 参考测试。"""
 
+from pathlib import Path
+
 import pytest
 
 from reference_solution import (
@@ -103,12 +105,60 @@ def test_highest_score_rejects_empty_data() -> None:
 def test_main_prints_expected_summary(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    main()
+    exit_code = main([])
 
     output = capsys.readouterr().out
 
+    assert exit_code == 0
     assert "学生人数: 8" in output
     assert "平均分: 74.50" in output
     assert "最高分: 92.0 (赵六)" in output
     assert "及格率: 75.00%" in output
 
+
+def test_main_accepts_custom_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "custom.csv"
+    csv_path.write_text(
+        "name,major,score\n甲,统计,60\n乙,统计,100\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([str(csv_path)])
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "学生人数: 2" in output
+    assert "平均分: 80.00" in output
+
+
+def test_main_reports_missing_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "missing.csv"
+
+    exit_code = main([str(csv_path)])
+    error_output = capsys.readouterr().err
+
+    assert exit_code == 1
+    assert "文件不存在" in error_output
+
+
+def test_main_reports_invalid_score(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "invalid.csv"
+    csv_path.write_text(
+        "name,major,score\n甲,统计,abc\n乙,统计,100\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([str(csv_path)])
+    error_output = capsys.readouterr().err
+
+    assert exit_code == 2
+    assert "数据格式不正确" in error_output

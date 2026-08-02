@@ -1,11 +1,28 @@
 """学生成绩摘要：诊断题参考实现。"""
 
+import argparse
 import csv
+import sys
 from pathlib import Path
 
 
 Student = dict[str, str]
 DATA_FILE = Path(__file__).resolve().parent / "data" / "students.csv"
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """创建命令行参数解析器。"""
+    parser = argparse.ArgumentParser(
+        description="读取学生成绩 CSV 并输出统计摘要",
+    )
+    parser.add_argument(
+        "csv_path",
+        nargs="?",
+        type=Path,
+        default=DATA_FILE,
+        help="CSV 文件路径；省略时使用内置样例数据",
+    )
+    return parser
 
 
 def read_students(path: Path) -> list[Student]:
@@ -83,11 +100,22 @@ def print_summary(students: list[Student]) -> None:
         print(f"  {major}: {average:.2f}")
 
 
-def main() -> None:
-    students = read_students(DATA_FILE)
-    print_summary(students)
+def main(argv: list[str] | None = None) -> int:
+    """运行命令行应用并返回进程退出码。"""
+    args = build_parser().parse_args(argv)
+
+    try:
+        students = read_students(args.csv_path)
+        print_summary(students)
+    except FileNotFoundError:
+        print(f"错误：文件不存在：{args.csv_path}", file=sys.stderr)
+        return 1
+    except (KeyError, ValueError) as error:
+        print(f"错误：数据格式不正确：{error}", file=sys.stderr)
+        return 2
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
-
+    raise SystemExit(main())
