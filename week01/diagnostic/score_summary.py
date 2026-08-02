@@ -32,8 +32,8 @@ def max_score(students: list[Student]) -> tuple[float, str]:
 def pass_score(scores: list[int]) -> tuple[int, float]:
     if not scores:
         return 0, 0.0
-    result = sum(score >=60 for score in scores)
-    return result, result/len(scores)
+    passed_count = sum(score >= 60 for score in scores)
+    return passed_count, passed_count/len(scores)
 
 def average_major(students: list[Student]) -> dict[str, float]:
     major_stats = {}

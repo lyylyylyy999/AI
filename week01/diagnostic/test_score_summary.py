@@ -23,7 +23,7 @@ def test_max_score_prefers_100_over_92() -> None:
     assert result_score == 100
     assert result_name == "王五" 
 
-def test_pass_score_over_60() -> None:
+def test_pass_score_includes_60() -> None:
     score = [59, 60, 100]
 
     result_pass_students, result_pass_rate = pass_score(score)
@@ -32,9 +32,9 @@ def test_pass_score_over_60() -> None:
     assert result_pass_rate == pytest.approx(2/3)
 
 def test_average_major() -> None:
-    students = [{"name": "张三", "major":"应用统计", "score": 92}, 
-                {"name": "李四", "major":"数学", "score": 95}, 
-                {"name": "王五", "major":"应用统计", "score": 100}]
+    students = [{"name": "张三", "major":"应用统计", "score": "92"}, 
+                {"name": "李四", "major":"数学", "score": "95"}, 
+                {"name": "王五", "major":"应用统计", "score": "100"}]
 
     result = average_major(students)
     assert result == {
