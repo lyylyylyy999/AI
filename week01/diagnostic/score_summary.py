@@ -30,6 +30,8 @@ def max_score(students: list[Student]) -> tuple[float, str]:
     return float(top_student["score"]), top_student["name"]
 
 def pass_score(students_score: list[int]) -> tuple[int, float]:
+    if not students_score:
+        return 0, 0.0
     pass_students = []
     for i in students_score:
         if i>=60:
