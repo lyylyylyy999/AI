@@ -5,7 +5,6 @@ import csv
 import sys
 from pathlib import Path
 
-
 Student = dict[str, str]
 DATA_FILE = Path(__file__).resolve().parent / "data" / "students.csv"
 
@@ -56,9 +55,7 @@ def pass_statistics(
     if not students:
         return 0, 0.0
 
-    passed_count = sum(
-        int(student["score"]) >= passing_score for student in students
-    )
+    passed_count = sum(int(student["score"]) >= passing_score for student in students)
     return passed_count, passed_count / len(students)
 
 
@@ -77,8 +74,7 @@ def average_scores_by_major(students: list[Student]) -> dict[str, float]:
         major_stats[major]["count"] += 1
 
     return {
-        major: stats["total"] / stats["count"]
-        for major, stats in major_stats.items()
+        major: stats["total"] / stats["count"] for major, stats in major_stats.items()
     }
 
 

@@ -3,7 +3,6 @@
 from pathlib import Path
 
 import pytest
-
 from reference_solution import (
     Student,
     average_score,
@@ -23,9 +22,7 @@ from reference_solution import (
     ],
     ids=["single-score", "two-scores", "boundary-scores"],
 )
-def test_average_score_cases(
-    scores: list[int], expected_average: float
-) -> None:
+def test_average_score_cases(scores: list[int], expected_average: float) -> None:
     students: list[Student] = [
         {"name": f"学生{index}", "major": "测试", "score": str(score)}
         for index, score in enumerate(scores)

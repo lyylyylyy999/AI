@@ -17,12 +17,17 @@
 - argparse 命令行路径：已通过
 - stdout、stderr 与退出码：已通过
 - tmp_path CLI 集成测试：已通过
+- Ruff lint 与自动格式化：已通过
+- mypy 严格类型检查：已通过
+- 生产代码与参考答案质量门：全部通过
 
 本阶段参考实现已经校准：函数签名明确区分 `list[Student]`、`tuple[int, float]`、`dict[str, float]` 和 `None`，最高分比较会先把 CSV 字符串转换为数值。
 
 测试阶段的推荐写法位于 `reference_tests.py`。它与 `reference_solution.py` 配套，展示显式导入、场景化命名、参数化、浮点近似比较、异常断言、空数据契约和终端输出集成测试。
 
 CLI 阶段的参考实现支持默认数据和用户传入路径，以 0、1、2 区分成功、文件不存在和数据错误。`main(argv)` 的设计允许测试直接模拟命令行参数，而无需创建子进程。
+
+代码质量阶段要求生产实现与参考实现同时通过 Ruff check、Ruff format、mypy strict 和 pytest。格式化只负责统一排版，不能替代类型检查和行为测试。
 
 ## 建议阅读顺序
 
