@@ -68,7 +68,12 @@ def test_main_prints_expected_summary(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     exit_code = main([])
+    output = capsys.readouterr().out
     assert exit_code == 0
+    assert "学生人数：8" in output
+    assert "平均分：74.50" in output
+    assert "最高分：92.0 (赵六)" in output
+    assert "及格率：75.00%" in output
 
 def test_main_accepts_custom_csv(
     tmp_path: Path,
