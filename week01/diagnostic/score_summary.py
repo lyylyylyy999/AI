@@ -57,6 +57,7 @@ def average_major(students: list[Student]) -> dict[str, float]:
 def main() -> None:
     path = Path(__file__).resolve().parent / "data" / "students.csv"
     students = read_students(path)
+    print(students)
     total_student = total_students(students)
     students_score = []
     for i in range(0,len(students)):
