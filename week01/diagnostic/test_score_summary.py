@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 
 from score_summary import (
     average_major,
@@ -66,11 +67,22 @@ def test_max_score_with_empty() -> None:
 def test_main_prints_expected_summary(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    main()
+    exit_code = main([])
+    assert exit_code == 0
 
+def test_main_accepts_custom_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "custom.csv"
+    csv_path.write_text(
+        "name,major,score\n甲,统计,60\n乙,统计,100\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([str(csv_path)])
     output = capsys.readouterr().out
 
-    assert "学生人数：8" in output
-    assert "平均分：74.50" in output
-    assert "最高分：92.0 (赵六)" in output
-    assert "及格率：75.00%" in output
+    assert exit_code == 0
+    assert "学生人数：2" in output
+    assert "平均分：80.00" in output

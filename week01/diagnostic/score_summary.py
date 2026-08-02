@@ -1,7 +1,25 @@
 import csv
 from pathlib import Path
+import argparse
+import sys
 
 Student = dict[str, str]
+DEFAULT_DATA_FILE = (
+    Path(__file__).resolve().parent / "data" / "students.csv"
+)
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="读取学生成绩 CSV 并输出统计摘要",
+    )
+    parser.add_argument(
+        "csv_path",
+        nargs="?",
+        type=Path,
+        default=DEFAULT_DATA_FILE,
+        help="CSV 文件路径；省略时使用内置样例数据",
+    )
+    return parser
 
 def read_students(path: Path) -> list[Student]:
     with open(path, "r", encoding="utf-8", newline="") as file:
@@ -51,29 +69,37 @@ def average_major(students: list[Student]) -> dict[str, float]:
         average[major] = (stats["total"] / stats["count"])
     return average
 
-def main() -> None:
-    path = Path(__file__).resolve().parent / "data" / "students.csv"
-    students = read_students(path)
-    print(students)
-    total_student = total_students(students)
-    scores = []
-    for i in range(0,len(students)):
-        scores.append(int(students[i]["score"]))
-    average = average_score(scores)
-    max_sc, max_name = max_score(students)
-    passed_count, pass_rate = pass_score(scores)
-    major_average = average_major(students)
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    try:
+        students = read_students(args.csv_path)
+        total_student = total_students(students)
+        scores = []
+        for i in range(0,len(students)):
+            scores.append(int(students[i]["score"]))
+        average = average_score(scores)
+        max_sc, max_name = max_score(students)
+        passed_count, pass_rate = pass_score(scores)
+        major_average = average_major(students)
 
 
-    print(f"学生人数：{total_student}")
-    print(f"平均分：{average:.2f}")
-    print(f"最高分：{max_sc:.1f} ({max_name})")
-    print(f"及格人数：{passed_count}")
-    print(f"及格率：{pass_rate:.2%}")
-    print("各专业平均分：")
-    for major, score in major_average.items():
-        print(f"  {major}: {score:.2f}")
+        print(f"学生人数：{total_student}")
+        print(f"平均分：{average:.2f}")
+        print(f"最高分：{max_sc:.1f} ({max_name})")
+        print(f"及格人数：{passed_count}")
+        print(f"及格率：{pass_rate:.2%}")
+        print("各专业平均分：")
+        for major, score in major_average.items():
+            print(f"  {major}: {score:.2f}")
+    except FileNotFoundError:
+        print(f"错误：文件不存在：{args.csv_path}", file=sys.stderr)
+        return 1
+    except (KeyError, ValueError) as error:
+        print(f"错误：数据格式不正确：{error}", file=sys.stderr)
+        return 2
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
