@@ -15,15 +15,15 @@ def test_average_score_with_typical_scores() -> None:
 
     assert result == 77.0
 
-def test_max_score() -> None:
-    students = [{"name": "张三", "score": 92}, {"name": "李四", "score": 95}, {"name": "王五", "score": 100}]
+def test_max_score_prefers_100_over_92() -> None:
+    students = [{"name": "张三", "score": "92"}, {"name": "李四", "score": "95"}, {"name": "王五", "score": "100"}]
 
     result_score, result_name = max_score(students)
 
-    assert result_score ==100
+    assert result_score == 100
     assert result_name == "王五" 
 
-def test_pass_score() -> None:
+def test_pass_score_over_60() -> None:
     score = [59, 60, 100]
 
     result_pass_students, result_pass_rate = pass_score(score)
@@ -37,9 +37,10 @@ def test_average_major() -> None:
                 {"name": "王五", "major":"应用统计", "score": 100}]
 
     result = average_major(students)
-    assert len(result.keys()) >= 2
-    assert result["应用统计"] == 96
-    assert result["数学"] == 95
+    assert result == {
+        "应用统计": 96.0,
+        "数学": 95.0,
+    }
 
 def test_average_score_with_empty() -> None:
     with pytest.raises(ValueError):

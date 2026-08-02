@@ -12,11 +12,11 @@ def read_students(path: Path) -> list[Student]:
 def total_students(students: list[Student]) -> int:
     return len(students)
 
-def average_score(students_score: list[int]) -> float:
-    if not students_score:
+def average_score(scores: list[int]) -> float:
+    if not scores:
         raise ValueError("无法计算空列表的平均分")
 
-    return sum(students_score) / len(students_score)
+    return sum(scores) / len(scores)
 
 def max_score(students: list[Student]) -> tuple[float, str]:
     if not students:
@@ -29,16 +29,11 @@ def max_score(students: list[Student]) -> tuple[float, str]:
 
     return float(top_student["score"]), top_student["name"]
 
-def pass_score(students_score: list[int]) -> tuple[int, float]:
-    if not students_score:
+def pass_score(scores: list[int]) -> tuple[int, float]:
+    if not scores:
         return 0, 0.0
-    pass_students = []
-    for i in students_score:
-        if i>=60:
-            pass_students.append(1)
-        else:
-            pass_students.append(0)
-    return sum(pass_students), sum(pass_students)/len(pass_students)
+    result = sum(score >=60 for score in scores)
+    return result, result/len(scores)
 
 def average_major(students: list[Student]) -> dict[str, float]:
     major_stats = {}
@@ -61,19 +56,19 @@ def main() -> None:
     students = read_students(path)
     print(students)
     total_student = total_students(students)
-    students_score = []
+    scores = []
     for i in range(0,len(students)):
-        students_score.append(int(students[i]["score"]))
-    average = average_score(students_score)
+        scores.append(int(students[i]["score"]))
+    average = average_score(scores)
     max_sc, max_name = max_score(students)
-    pass1,pass_rate = pass_score(students_score)
+    passed_count, pass_rate = pass_score(scores)
     major_average = average_major(students)
 
 
     print(f"学生人数：{total_student}")
     print(f"平均分：{average:.2f}")
     print(f"最高分：{max_sc:.1f} ({max_name})")
-    print(f"及格人数：{pass1}")
+    print(f"及格人数：{passed_count}")
     print(f"及格率：{pass_rate:.2%}")
     print("各专业平均分：")
     for major, score in major_average.items():
