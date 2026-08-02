@@ -1,7 +1,11 @@
 import pytest
 
-from score_summary import *
-from loguru import logger
+from score_summary import (
+    average_major,
+    average_score,
+    max_score,
+    pass_score,
+)
 
 
 def test_average_score_with_typical_scores() -> None:
@@ -25,7 +29,7 @@ def test_pass_score() -> None:
     result_pass_students, result_pass_rate = pass_score(score)
 
     assert result_pass_students == 2
-    assert result_pass_rate == 2/3
+    assert result_pass_rate == pytest.approx(2/3)
 
 def test_average_major() -> None:
     students = [{"name": "张三", "major":"应用统计", "score": 92}, 
@@ -45,6 +49,6 @@ def test_max_score_with_empty() -> None:
     with pytest.raises(ValueError):
         max_score([])
 
-def test_average_major_with_empty() -> None:
-    assert average_major([]) == (0, 0.0)
+def test_pass_score_with_empty() -> None:
+    assert pass_score([]) == (0, 0.0)
 
