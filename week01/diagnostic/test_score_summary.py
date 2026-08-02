@@ -86,3 +86,31 @@ def test_main_accepts_custom_csv(
     assert exit_code == 0
     assert "学生人数：2" in output
     assert "平均分：80.00" in output
+
+def test_main_missing_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "missing.csv"
+
+    exit_code = main([str(csv_path)])
+    output = capsys.readouterr().err
+
+    assert exit_code == 1
+    assert "文件不存在" in output
+
+def test_main_error_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "custom.csv"
+    csv_path.write_text(
+        "name,major,score\n甲,统计,abc\n乙,统计,100\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([str(csv_path)])
+    output = capsys.readouterr().err
+
+    assert exit_code == 2
+    assert "数据格式不正确" in output
