@@ -141,3 +141,21 @@ def test_main_error_csv(
 
     assert exit_code == 2
     assert "数据格式不正确" in output
+
+
+def test_main_accepts_test_csv(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    csv_path = tmp_path / "test.csv"
+    csv_path.write_text(
+        "name,major,score\n甲,统计,60\n乙,统计,100\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([str(csv_path), "--passing-score=80"])
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "及格人数：1" in output
+    assert "及格率：50.00%" in output

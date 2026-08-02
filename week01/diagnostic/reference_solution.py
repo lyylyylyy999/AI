@@ -21,6 +21,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=DATA_FILE,
         help="CSV 文件路径；省略时使用内置样例数据",
     )
+    parser.add_argument(
+        "--passing-score",
+        type=int,
+        default=60,
+        help="及格分数线（默认：60）",
+    )
     return parser
 
 
@@ -78,11 +84,11 @@ def average_scores_by_major(students: list[Student]) -> dict[str, float]:
     }
 
 
-def print_summary(students: list[Student]) -> None:
+def print_summary(students: list[Student], passing_score: int = 60) -> None:
     """计算并打印学生成绩摘要。"""
     overall_average = average_score(students)
     top_student = highest_scoring_student(students)
-    passed_count, passed_rate = pass_statistics(students)
+    passed_count, passed_rate = pass_statistics(students, passing_score)
     major_averages = average_scores_by_major(students)
 
     print(f"学生人数: {len(students)}")
@@ -102,7 +108,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         students = read_students(args.csv_path)
-        print_summary(students)
+        print_summary(students, args.passing_score)
     except FileNotFoundError:
         print(f"错误：文件不存在：{args.csv_path}", file=sys.stderr)
         return 1

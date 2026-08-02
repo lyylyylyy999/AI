@@ -18,6 +18,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_DATA_FILE,
         help="CSV 文件路径；省略时使用内置样例数据",
     )
+    parser.add_argument(
+        "--passing-score",
+        type=int,
+        default=60,
+        help="及格分数线（默认：60）",
+    )
     return parser
 
 
@@ -51,10 +57,10 @@ def max_score(students: list[Student]) -> tuple[float, str]:
     return float(top_student["score"]), top_student["name"]
 
 
-def pass_score(scores: list[int]) -> tuple[int, float]:
+def pass_score(scores: list[int], passed_score: int = 60) -> tuple[int, float]:
     if not scores:
         return 0, 0.0
-    passed_count = sum(score >= 60 for score in scores)
+    passed_count = sum(score >= passed_score for score in scores)
     return passed_count, passed_count / len(scores)
 
 
@@ -83,7 +89,7 @@ def main(argv: list[str] | None = None) -> int:
         scores = [int(student["score"]) for student in students]
         average = average_score(scores)
         max_sc, max_name = max_score(students)
-        passed_count, pass_rate = pass_score(scores)
+        passed_count, pass_rate = pass_score(scores, args.passing_score)
         major_average = average_major(students)
 
         print(f"学生人数：{total_student}")
