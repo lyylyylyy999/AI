@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+DEFALUT_PATH = Path(__file__).resolve().parent / "data"
 
 def build_research_record() -> dict[str, object]:
     record = {
@@ -34,15 +35,15 @@ def load_json(path: Path) -> object:
         return json.load(f)
 
 
-def main() -> None:
+def main(tmp_path: Path) -> None:
     record = build_research_record()
     json_text = serialize_record(record)
-    path = Path("week02/lesson01_json/data/record.json")
-    save_record(record, path)
-    python_text = load_json(path)
+    record_path = tmp_path / "record.json"
+    save_record(record, record_path)
+    python_text = load_json(record_path)
     print(json_text)
     print(python_text)
 
 
 if __name__ == "__main__":
-    main()
+    main(tmp_path=DEFALUT_PATH)
