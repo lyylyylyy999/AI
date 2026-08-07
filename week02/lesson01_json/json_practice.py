@@ -7,11 +7,11 @@ def build_research_record() -> dict[str, object]:
     record = {
         "chinese_title": "第二周作业",
         "sample_size": 240,
-        "stat_method": ["贝叶斯", "因素分析"],
+        "statistical_methods": ["贝叶斯", "因素分析"],
         "effect_size": 0.8,
-        "peer_review": True,
+        "peer_reviewed": True,
         "remarks": None,
-        "objects": {
+        "metadata": {
             "language": "chinese",
             "year": 2026,
         },

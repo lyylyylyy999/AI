@@ -15,8 +15,8 @@ INVALID_PATH = Path(__file__).resolve().parent / "data" / "invalid_research_reco
 def test_build_research_record() -> None:
     record = build_research_record()
     assert record["remarks"] is None
-    assert isinstance(record["peer_review"], bool)
-    assert isinstance(record["stat_method"], list)
+    assert isinstance(record["peer_reviewed"], bool)
+    assert isinstance(record["statistical_methods"], list)
 
 
 def test_serialize_record() -> None:
