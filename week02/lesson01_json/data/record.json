@@ -1,0 +1,15 @@
+{
+  "chinese_title": "第二周作业",
+  "sample_size": 240,
+  "stat_method": [
+    "贝叶斯",
+    "因素分析"
+  ],
+  "effect_size": 0.8,
+  "peer_review": true,
+  "remarks": "",
+  "objects": {
+    "language": "chinese",
+    "year": 2026
+  }
+}
