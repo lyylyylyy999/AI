@@ -46,10 +46,10 @@ def validate_summary_core(data: object) -> ResearchSummaryCore: ...
 
 验证顺序：
 
-1. 顶层必须是字典，否则抛出 `ValueError`。
+1. 顶层必须是字典，否则抛出 `TypeError`。
 2. 三个必需字段必须全部存在，缺少任意字段都抛出 `ValueError`。
-3. 两个文本字段必须是非空字符串。
-4. `sample_size` 必须是正整数或 `None`，并明确拒绝布尔值。
+3. 两个文本字段类型错误时抛出 `TypeError`，空字符串或纯空白字符串抛出 `ValueError`。
+4. `sample_size` 类型错误（包括布尔值）时抛出 `TypeError`，整数小于等于零时抛出 `ValueError`。
 5. 校验通过后构造并返回一个新的 `ResearchSummaryCore`。
 
 不要使用 `assert` 校验外部数据；`assert` 用于开发期内部假设，可能在优化模式下被禁用。不要用 `str(value)` 或 `int(value)` 静默修复错误类型。
@@ -78,20 +78,20 @@ mypy 能推断 `question` 是 `str`。但 `TypedDict` 只参与静态类型检�
 
 1. 正整数样本量通过，返回值只包含三个契约字段。
 2. `sample_size=None` 通过。
-3. 顶层为列表时失败。
+3. 顶层为列表时抛出 `TypeError`。
 4. 使用参数化测试覆盖三个必需字段分别缺失。
 5. 两个字符串字段分别为空字符串或只有空白时失败。
 6. `sample_size` 为字符串时失败。
 7. `sample_size` 为 `0` 或负数时失败。
 8. `sample_size=True` 时失败。
 
-重点断言准确的 `ValueError`，并检查错误消息包含相关字段名。不要只写 `pytest.raises(Exception)`。
+重点区分 `TypeError` 与 `ValueError`，并检查错误消息包含相关字段名。不要只写 `pytest.raises(Exception)`。
 
 ## 验收标准
 
 - 返回类型为 `ResearchSummaryCore`，不是宽泛的 `dict[str, object]` 或 `Any`。
 - 未使用 `cast()`、`# type: ignore` 或静默类型转换绕过校验。
-- 所有失败路径提供可定位字段的错误信息。
+- 所有失败路径使用准确的异常类型，并提供可定位字段的错误信息。
 - 测试不访问网络、不写仓库固定路径。
 - Ruff、mypy strict 和 pytest 全部通过。
 

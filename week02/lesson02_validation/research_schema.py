@@ -1,5 +1,3 @@
-import io
-import json
 from typing import TypedDict
 
 
@@ -11,7 +9,7 @@ class ResearchSummaryCore(TypedDict):
 
 def validate_summary_core(data: object) -> ResearchSummaryCore:
     if not isinstance(data, dict):
-        raise ValueError("传入的必须是字典")
+        raise TypeError("传入的必须是字典")
     required = {"research_question", "data_source", "sample_size"}
     missing = required - data.keys()
     if missing:
@@ -41,12 +39,3 @@ def validate_summary_core(data: object) -> ResearchSummaryCore:
         data_source=data["data_source"],
         sample_size=data["sample_size"],
     )
-
-
-def main() -> None:
-    data = {"research_question": 123, "data_source": "GitHub", "sample_size": None}
-    print(validate_summary_core(data))
-
-
-if __name__ == "__main__":
-    main()
