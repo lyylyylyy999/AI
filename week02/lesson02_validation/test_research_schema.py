@@ -1,5 +1,5 @@
 import pytest
-from research_schema import validate_summary_core
+from research_schema import validate_research_summary, validate_summary_core
 
 
 def test_sample_size_with_positive() -> None:
@@ -142,6 +142,243 @@ def test_sample_size_with_exception(
 ) -> None:
     with pytest.raises(exception, match=match):
         validate_summary_core(data)
+
+
+def test_alidate_research_summary_with_normal() -> None:
+    data = {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": [],
+        "key_findings": ["123", "234"],
+        "limitations": ["123", "234", "345"],
+    }
+    assert validate_research_summary(data) == data
+
+
+def test_value_with_empty() -> None:
+    data: dict[str, object] = {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": [],
+        "key_findings": [],
+        "limitations": [],
+    }
+    assert validate_research_summary(data) == data
+
+
+@pytest.mark.parametrize(
+    ("data", "exception", "match"),
+    [
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "key_findings": ["123", "234"],
+                "limitations": ["123", "234", "345"],
+            },
+            ValueError,
+            "缺少字段: statistical_methods",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "limitations": ["123", "234", "345"],
+            },
+            ValueError,
+            "缺少字段: key_findings",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ["123", "234"],
+            },
+            ValueError,
+            "缺少字段: limitations",
+        ),
+    ],
+    ids=("statistical_methods", "key_findings", "limitations"),
+)
+def test_missing_field_2(
+    data: dict[str, object], exception: type[Exception], match: str
+) -> None:
+    with pytest.raises(exception, match=match):
+        validate_research_summary(data)
+
+
+@pytest.mark.parametrize(
+    ("data", "exception", "match"),
+    [
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": "123",
+                "key_findings": ["123", "234"],
+                "limitations": ["123", "234", "345"],
+            },
+            TypeError,
+            "字段值必须是列表",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ("123", "234"),
+                "limitations": ["123", "234", "345"],
+            },
+            TypeError,
+            "字段值必须是列表",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ["123", "234"],
+                "limitations": None,
+            },
+            TypeError,
+            "字段值必须是列表",
+        ),
+    ],
+    ids=("statistical_methods", "key_findings", "limitations"),
+)
+def test_value_with_exception(
+    data: dict[str, object], exception: type[Exception], match: str
+) -> None:
+    with pytest.raises(exception, match=match):
+        validate_research_summary(data)
+
+
+@pytest.mark.parametrize(
+    ("data", "exception", "match"),
+    [
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [123],
+                "key_findings": ["123", "234"],
+                "limitations": ["123", "234", "345"],
+            },
+            TypeError,
+            "statistical_methods的第0个值: 必须是字符串",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": [123],
+                "limitations": ["123", "234", "345"],
+            },
+            TypeError,
+            "key_findings的第0个值: 必须是字符串",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ["123", "234"],
+                "limitations": [123],
+            },
+            TypeError,
+            "limitations的第0个值: 必须是字符串",
+        ),
+    ],
+    ids=("statistical_methods", "key_findings", "limitations"),
+)
+def test_element_with_int(
+    data: dict[str, object], exception: type[Exception], match: str
+) -> None:
+    with pytest.raises(exception, match=match):
+        validate_research_summary(data)
+
+
+@pytest.mark.parametrize(
+    ("data", "exception", "match"),
+    [
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [""],
+                "key_findings": ["123", "234"],
+                "limitations": ["123", "234", "345"],
+            },
+            ValueError,
+            "statistical_methods的第0个值: 不能是空字符串",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ["  "],
+                "limitations": ["123", "234", "345"],
+            },
+            ValueError,
+            "key_findings的第0个值: 不能是空字符串",
+        ),
+        (
+            {
+                "research_question": "研究问题",
+                "data_source": "GitHub",
+                "sample_size": None,
+                "statistical_methods": [],
+                "key_findings": ["123", "234"],
+                "limitations": ["   "],
+            },
+            ValueError,
+            "limitations的第0个值: 不能是空字符串",
+        ),
+    ],
+    ids=("statistical_methods", "key_findings", "limitations"),
+)
+def test_empty_element(
+    data: dict[str, object], exception: type[Exception], match: str
+) -> None:
+    with pytest.raises(exception, match=match):
+        validate_research_summary(data)
+
+
+def test_addtional_value() -> None:
+    data = {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": [],
+        "key_findings": ["123", "234"],
+        "limitations": ["123", "234", "345"],
+        "addition": "abc",
+    }
+    assert validate_research_summary(data) == {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": [],
+        "key_findings": ["123", "234"],
+        "limitations": ["123", "234", "345"],
+    }
 
 
 if __name__ == "__main__":
