@@ -7,10 +7,12 @@ def test_sample_size_with_positive() -> None:
         "research_question": "研究问题",
         "data_source": "GitHub",
         "sample_size": 123,
+        "additional": 234,
     }
     text = validate_summary_core(data)
     assert text["sample_size"] is not None
     assert text["sample_size"] > 0
+    assert set(text.keys()) == {"research_question", "data_source", "sample_size"}
 
 
 def test_sample_size_with_None() -> None:
@@ -30,15 +32,30 @@ def test_list() -> None:
 
 
 @pytest.mark.parametrize(
-    ("data"),
+    ("data", "exception", "match"),
     [
-        {"data_source": "GitHub", "sample_size": None},
-        {"research_question": "研究问题", "sample_size": None},
-        {"research_question": "研究问题", "data_source": "GitHub"},
+        (
+            {"data_source": "GitHub", "sample_size": None},
+            ValueError,
+            "缺少字段: research_question",
+        ),
+        (
+            {"research_question": "研究问题", "sample_size": None},
+            ValueError,
+            "缺少字段: data_source",
+        ),
+        (
+            {"research_question": "研究问题", "data_source": "GitHub"},
+            ValueError,
+            "缺少字段: sample_size",
+        ),
     ],
+    ids=("research_question", "data_source", "sample_size"),
 )
-def test_missing_field(data: dict[str, object]) -> None:
-    with pytest.raises(ValueError):
+def test_missing_field(
+    data: dict[str, object], exception: type[Exception], match: str
+) -> None:
+    with pytest.raises(exception, match=match):
         validate_summary_core(data)
 
 
