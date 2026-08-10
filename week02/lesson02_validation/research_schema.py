@@ -10,42 +10,42 @@ class ResearchSummaryCore(TypedDict):
 
 
 def validate_summary_core(data: object) -> ResearchSummaryCore:
-    if isinstance(data, io.IOBase):
-        python_text = json.load(data)
-    else:
-        python_text = data
-    if not isinstance(python_text, dict):
-        raise (TypeError)
-    if (
-        "research_question" not in python_text
-        or "data_source" not in python_text
-        or "sample_size" not in python_text
-    ):
-        raise (ValueError)
-    if (
-        python_text["research_question"].strip() == ""
-        or python_text["data_source"].strip() == ""
-    ):
-        raise (ValueError)
-    if (
-        python_text["sample_size"] != None
-        and not isinstance(python_text["sample_size"], int)
-        or isinstance(python_text["sample_size"], bool)
-        or isinstance(python_text["sample_size"], int)
-        and python_text["sample_size"] <= 0
-    ):
-        raise (ValueError)
+    if not isinstance(data, dict):
+        raise ValueError("传入的必须是字典")
+    required = {"research_question", "data_source", "sample_size"}
+    missing = required - data.keys()
+    if missing:
+        raise ValueError(f"缺少字段: {', '.join(missing)}")
+    str_fields = []
+    if not isinstance(data["research_question"], str):
+        str_fields.append("research_question")
+    if not isinstance(data["data_source"], str):
+        str_fields.append("data_source")
+    if str_fields:
+        raise TypeError(f"{', '.join(str_fields)}: 必须为字符串")
+    empty_fields = []
+    if not data["research_question"].strip():
+        empty_fields.append("research_question")
+    if not data["data_source"].strip():
+        empty_fields.append("data_source")
+    if empty_fields:
+        raise ValueError(f"{', '.join(empty_fields)}: 字符串为空")
+    if isinstance(data["sample_size"], bool):
+        raise TypeError("sample_size: 不能为 bool 类型")
+    if data["sample_size"] is not None and not isinstance(data["sample_size"], int):
+        raise TypeError("sample_size: 必须为 int 类型")
+    elif data["sample_size"] is not None and data["sample_size"] <= 0:
+        raise ValueError("sample_size: 必须是正数")
     return ResearchSummaryCore(
-        research_question=python_text["research_question"],
-        data_source=python_text["data_source"],
-        sample_size=python_text["sample_size"],
+        research_question=data["research_question"],
+        data_source=data["data_source"],
+        sample_size=data["sample_size"],
     )
 
 
 def main() -> None:
-    data = "week02/lesson02_validation/data/data.json"
-    with open(data, "r", encoding="utf-8") as f:
-        print(validate_summary_core(f))
+    data = {"research_question": 123, "data_source": "GitHub", "sample_size": None}
+    print(validate_summary_core(data))
 
 
 if __name__ == "__main__":
