@@ -59,12 +59,13 @@ def validate_summary_core(data: object) -> ResearchSummaryCore:
 
 def _validate_string_list(value: object, field: str) -> list[str]:
     if not isinstance(value, list):
-        raise TypeError("字段值必须是列表")
+        raise TypeError(f"{field}: 必须是列表")
     for i in range(len(value)):
         if not isinstance(value[i], str):
             raise TypeError(f"{field}的第{i}个值: 必须是字符串")
         if not value[i].strip():
             raise ValueError(f"{field}的第{i}个值: 不能是空字符串")
+    value = list(value)
     return value
 
 
@@ -93,12 +94,15 @@ def validate_research_summary(data: object) -> ResearchSummary:
     )
 
 
+a = ["12"]
+b = ["12", "23"]
+c = ["12", "23", "34"]
 data = {
     "research_question": "研究问题",
     "data_source": "GitHub",
     "sample_size": None,
-    "statistical_methods": [],
-    "key_findings": ["123", "234"],
-    "limitations": ["123", "234", "345"],
+    "statistical_methods": a,
+    "key_findings": b,
+    "limitations": c,
 }
 print(validate_research_summary(data))

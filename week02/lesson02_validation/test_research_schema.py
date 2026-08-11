@@ -227,7 +227,7 @@ def test_missing_field_2(
                 "limitations": ["123", "234", "345"],
             },
             TypeError,
-            "字段值必须是列表",
+            "statistical_methods: 必须是列表",
         ),
         (
             {
@@ -239,7 +239,7 @@ def test_missing_field_2(
                 "limitations": ["123", "234", "345"],
             },
             TypeError,
-            "字段值必须是列表",
+            "key_findings: 必须是列表",
         ),
         (
             {
@@ -251,7 +251,7 @@ def test_missing_field_2(
                 "limitations": None,
             },
             TypeError,
-            "字段值必须是列表",
+            "limitations: 必须是列表",
         ),
     ],
     ids=("statistical_methods", "key_findings", "limitations"),
@@ -361,7 +361,7 @@ def test_empty_element(
         validate_research_summary(data)
 
 
-def test_addtional_value() -> None:
+def test_additional_value() -> None:
     data = {
         "research_question": "研究问题",
         "data_source": "GitHub",
@@ -379,6 +379,32 @@ def test_addtional_value() -> None:
         "key_findings": ["123", "234"],
         "limitations": ["123", "234", "345"],
     }
+
+
+def test_new_list() -> None:
+    a = ["12"]
+    b = ["12", "23"]
+    c = ["12", "23", "34"]
+    data = {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": a,
+        "key_findings": b,
+        "limitations": c
+    }
+    result = validate_research_summary(data)
+    a.append("123")
+    assert result["statistical_methods"] is not a
+    assert result == {
+        "research_question": "研究问题",
+        "data_source": "GitHub",
+        "sample_size": None,
+        "statistical_methods": ["12"],
+        "key_findings": ["12", "23"],
+        "limitations": ["12", "23", "34"]
+    }
+
 
 
 if __name__ == "__main__":
