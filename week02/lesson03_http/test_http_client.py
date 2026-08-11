@@ -99,6 +99,7 @@ def test_handler_with_exception() -> None:
         fetch_service_info(client)
     assert exc_info.value.request.url.path == "/v1/info"
 
+
 def test_validate_array() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json=["a", "b", "c"])
