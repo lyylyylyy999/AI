@@ -22,7 +22,7 @@ def test_get() -> None:
 def test_post() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.method == "POST"
-        assert request.headers["Accept"] == "application/json"
+        assert request.headers["Content-Type"] == "application/json"
         assert request.url.path == "/v1/extract"
         body = json.loads(request.content)
         assert body == {"abstract": "1234"}
@@ -89,15 +89,15 @@ def test_httpstatuserror_with_500() -> None:
 
 def test_handler_with_exception() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
-        raise httpx.ReadTimeout("超时")
+        raise httpx.ReadTimeout("超时", request=request)
 
     transport = httpx.MockTransport(handler)
     with (
-        pytest.raises(httpx.ReadTimeout, match="超时"),
         build_client(transport) as client,
+        pytest.raises(httpx.ReadTimeout, match="超时") as exc_info,
     ):
         fetch_service_info(client)
-
+    assert exc_info.value.request.url.path == "/v1/info"
 
 def test_validate_array() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
