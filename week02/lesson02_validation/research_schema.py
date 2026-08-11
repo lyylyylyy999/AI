@@ -92,17 +92,3 @@ def validate_research_summary(data: object) -> ResearchSummary:
         key_findings=key_findings,
         limitations=limitations,
     )
-
-
-a = ["12"]
-b = ["12", "23"]
-c = ["12", "23", "34"]
-data = {
-    "research_question": "研究问题",
-    "data_source": "GitHub",
-    "sample_size": None,
-    "statistical_methods": a,
-    "key_findings": b,
-    "limitations": c,
-}
-print(validate_research_summary(data))

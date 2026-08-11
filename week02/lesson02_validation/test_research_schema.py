@@ -391,7 +391,7 @@ def test_new_list() -> None:
         "sample_size": None,
         "statistical_methods": a,
         "key_findings": b,
-        "limitations": c
+        "limitations": c,
     }
     result = validate_research_summary(data)
     a.append("123")
@@ -402,10 +402,5 @@ def test_new_list() -> None:
         "sample_size": None,
         "statistical_methods": ["12"],
         "key_findings": ["12", "23"],
-        "limitations": ["12", "23", "34"]
+        "limitations": ["12", "23", "34"],
     }
-
-
-
-if __name__ == "__main__":
-    pytest.main(["week02/lesson02_validation/test_research_schema.py", "-qs"])
