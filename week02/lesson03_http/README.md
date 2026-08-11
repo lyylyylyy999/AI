@@ -79,16 +79,13 @@ DEFAULT_TIMEOUT_SECONDS = 5.0
 
 def build_client(
     transport: httpx.BaseTransport | None = None,
-) -> httpx.Client:
-    ...
+) -> httpx.Client: ...
 
 
-def fetch_service_info(client: httpx.Client) -> object:
-    ...
+def fetch_service_info(client: httpx.Client) -> object: ...
 
 
-def submit_abstract(client: httpx.Client, abstract: str) -> object:
-    ...
+def submit_abstract(client: httpx.Client, abstract: str) -> object: ...
 ```
 
 ### `build_client`

@@ -11,7 +11,7 @@ def build_client(
         base_url=SERVICE_BASE_URL,
         transport=transport,
         timeout=DEFAULT_TIMEOUT_SECONDS,
-        headers={"Accept": "application/json"}
+        headers={"Accept": "application/json"},
     )
     return client
 
@@ -25,11 +25,6 @@ def fetch_service_info(client: httpx.Client) -> object:
 def submit_abstract(client: httpx.Client, abstract: str) -> object:
     if abstract.strip() == "":
         raise ValueError("abstract 不能为空")
-    response = client.post(
-        "/v1/extract",
-        json={
-            "abstract": abstract
-        }
-    )
+    response = client.post("/v1/extract", json={"abstract": abstract})
     response.raise_for_status()
     return response.json()
