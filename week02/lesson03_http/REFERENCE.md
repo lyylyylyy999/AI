@@ -48,3 +48,7 @@ response.json() → object → validate_research_summary() → ResearchSummary
 - 不使用异步 API。
 
 这些边界会在 DeepSeek 客户端阶段逐步加入。
+
+## 周复盘后的接口扩展
+
+`fetch_service_info()` 使用 `params={"lang": language}` 让 HTTPX 编码 query parameter，而不是手工拼接 URL。参考测试分别约束默认 `lang=zh`、自定义语言和空值不发送请求。

@@ -6,10 +6,9 @@
 
 - 阶段：第 1 阶段——Python 工程基础
 - 已完成：第 1 周——学生成绩统计 CLI、pytest、Ruff、mypy 与命令行错误处理
-- 已完成：第 2 周新知识——JSON、TypedDict、运行时数据校验、HTTPX 与 MockTransport
+- 已完成：第 2 周——JSON、TypedDict、运行时数据校验、HTTPX、MockTransport 与周复盘
 - 第 1 周检查点：通过（详见 [学习评估](week01/ASSESSMENT.md)）
-- 当前任务：第 2 周复盘与检查点
-- 下一任务：第 3 周——DeepSeek V4 Mock 客户端与模型响应解析
+- 当前任务：第 3 周——DeepSeek V4 Mock 客户端与模型响应解析
 - 学习节奏：每周 2–3 次，每次暂按约 3 小时安排
 
 ## 学习规则

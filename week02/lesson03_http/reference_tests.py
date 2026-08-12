@@ -19,6 +19,7 @@ def test_get_request_contract_and_json_response() -> None:
         assert request.method == "GET"
         assert request.url.host == "research-api.example.test"
         assert request.url.path == "/v1/info"
+        assert request.url.params["lang"] == "zh"
         assert request.headers["Accept"] == "application/json"
         return httpx.Response(200, json={"status": "ok"})
 
@@ -96,3 +97,23 @@ def test_http_layer_can_return_json_array() -> None:
 
     with make_mock_client(handler) as client:
         assert fetch_service_info(client) == ["a", "b"]
+
+
+def test_get_request_accepts_custom_language() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["lang"] == "en"
+        return httpx.Response(200, json={"status": "ok"})
+
+    with make_mock_client(handler) as client:
+        fetch_service_info(client, language="en")
+
+
+def test_blank_language_fails_before_transport_is_called() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise AssertionError(f"不应发送请求: {request.url}")
+
+    with (
+        make_mock_client(handler) as client,
+        pytest.raises(ValueError, match="language"),
+    ):
+        fetch_service_info(client, language="   ")

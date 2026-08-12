@@ -18,9 +18,12 @@ def build_client(
     )
 
 
-def fetch_service_info(client: httpx.Client) -> object:
+def fetch_service_info(client: httpx.Client, language: str = "zh") -> object:
     """读取服务信息，并传播 HTTPX 原始异常。"""
-    response = client.get("/v1/info")
+    if not language.strip():
+        raise ValueError("language: 不能为空")
+
+    response = client.get("/v1/info", params={"lang": language})
     response.raise_for_status()
     result: object = response.json()
     return result
