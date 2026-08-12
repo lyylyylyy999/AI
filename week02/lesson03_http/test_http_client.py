@@ -110,24 +110,32 @@ def test_validate_array() -> None:
         assert result == ["a", "b", "c"]
 
 
-def test_param() -> None:
+@pytest.mark.parametrize(
+    ("kwargs", "expected_lang"),
+    [
+        ({}, "zh"),
+        ({"language": "123"}, "123"),
+    ],
+    ids=("default", "123"),
+)
+def test_fetch_service_info_sends_custom_language(
+    kwargs: dict[str, str], expected_lang: str
+) -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.method == "GET"
         assert request.url.path == "/v1/info"
-        assert request.url.params["lang"] == "123"
+        assert request.url.params["lang"] == expected_lang
         return httpx.Response(200, json={"status": "ok"})
 
     transport = httpx.MockTransport(handler)
     with build_client(transport) as client:
-        result = fetch_service_info(client, "123")
+        result = fetch_service_info(client, **kwargs)
     assert result == {"status": "ok"}
 
 
-def test_param_with_empty() -> None:
+def test_blank_language_fails_before_request() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
-        assert request.method == "GET"
-        assert request.url.path == "/v1/info"
-        return httpx.Response(200, json={"status": "ok"})
+        raise AssertionError(f"不应发送请求：{request.url}")
 
     transport = httpx.MockTransport(handler)
     with (

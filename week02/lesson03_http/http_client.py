@@ -17,7 +17,7 @@ def build_client(
 
 
 def fetch_service_info(client: httpx.Client, language: str = "zh") -> object:
-    if language.strip() == "":
+    if language is not None and language.strip() == "":
         raise ValueError("language 不能为空")
     response = client.get("/v1/info", params={"lang": language})
     response.raise_for_status()
