@@ -110,5 +110,28 @@ def test_validate_array() -> None:
         assert result == ["a", "b", "c"]
 
 
-if __name__ == "__main__":
-    pytest.main(["week02/lesson03_http/test_http_client.py", "-qs"])
+def test_param() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.method == "GET"
+        assert request.url.path == "/v1/info"
+        assert request.url.params["lang"] == "123"
+        return httpx.Response(200, json={"status": "ok"})
+
+    transport = httpx.MockTransport(handler)
+    with build_client(transport) as client:
+        result = fetch_service_info(client, "123")
+    assert result == {"status": "ok"}
+
+
+def test_param_with_empty() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.method == "GET"
+        assert request.url.path == "/v1/info"
+        return httpx.Response(200, json={"status": "ok"})
+
+    transport = httpx.MockTransport(handler)
+    with (
+        build_client(transport) as client,
+        pytest.raises(ValueError, match="language 不能为空"),
+    ):
+        fetch_service_info(client, "")
