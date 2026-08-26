@@ -50,6 +50,16 @@ def test_valid_response_parser() -> None:
             ValueError,
             "choices[0].message.content 不能为空或者纯空白",
         ),
+        (
+            {"choices": [{"message": {"role": "assistant", "content": "\t\n"}}]},
+            ValueError,
+            "choices[0].message.content 不能为空或者纯空白",
+        ),
+        (
+            {"choices": [{"message": {"role": "assistant", "content": ""}}]},
+            ValueError,
+            "choices[0].message.content 不能为空或者纯空白",
+        ),
     ],
     ids=(
         "response",
@@ -62,11 +72,13 @@ def test_valid_response_parser() -> None:
         "choices[0].message.content_missing",
         "choices[0].message.content_none",
         "choices[0].message.content_type",
-        "choices[0].message.content_null",
+        "choices[0].message.content_blank_01",
+        "choices[0].message.content_blank_02",
+        "choices[0].message.content_empty",
     ),
 )
 def test_exception_response_parser(
-    data: dict[str, object], exception: type[Exception], match: str
+    data: object, exception: type[Exception], match: str
 ) -> None:
     with pytest.raises(exception, match=re.escape(match)):
         extract_message_content(data)
