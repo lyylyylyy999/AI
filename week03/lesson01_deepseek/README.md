@@ -86,8 +86,7 @@ API_KEY_ENV_NAME = "DEEPSEEK_API_KEY"
 from collections.abc import Mapping
 
 
-def get_api_key(environ: Mapping[str, str]) -> str:
-    ...
+def get_api_key(environ: Mapping[str, str]) -> str: ...
 ```
 
 - 只从传入的 mapping 读取 `DEEPSEEK_API_KEY`。
@@ -105,8 +104,7 @@ def get_api_key(environ: Mapping[str, str]) -> str:
 def build_deepseek_client(
     api_key: str,
     transport: httpx.BaseTransport | None = None,
-) -> httpx.Client:
-    ...
+) -> httpx.Client: ...
 ```
 
 - `base_url` 使用官方地址。
@@ -125,8 +123,7 @@ def build_deepseek_client(
 def request_research_extraction(
     client: httpx.Client,
     abstract: str,
-) -> object:
-    ...
+) -> object: ...
 ```
 
 - 摘要为空或纯空白时，在发送请求前抛出 `ValueError`。
