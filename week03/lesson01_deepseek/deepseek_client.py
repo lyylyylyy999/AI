@@ -45,7 +45,7 @@ def request_research_extraction(
             "messages": [
                 {
                     "role": "system",
-                    "content": "你是一名专业的数据提取专家，你的任务是根据用户的输入摘要，提取指定的业务信息。\n\n你必须遵循以下规则：\n1. 只返回合法的 JSON 对象；\n2. 你的返回结果只能包含以下 6 个字段：\n- research_question(字符串);\n- data_source(字符串);\n- sample_size(字符串),sample_size 未报告时使用 null;\n- statistical_methods(字符串数组);\n- key_findings(字符串数组);\n- limitations(字符串数组);\n3. statistical_methods、key_findings、limitations 未报告时使用空数组",
+                    "content": "你是一名专业的数据提取专家，你的任务是根据用户的输入摘要，提取指定的业务信息。\n\n你必须遵循以下规则：\n1. 只返回合法的 JSON 对象；\n2. 你的返回结果只能包含以下 6 个字段：\n- research_question(字符串);\n- data_source(字符串);\n- sample_size(正整数或 null),sample_size 未报告时使用 null;\n- statistical_methods(字符串数组);\n- key_findings(字符串数组);\n- limitations(字符串数组);\n3. statistical_methods、key_findings、limitations 未报告时使用空数组",
                 },
                 {"role": "user", "content": abstract},
             ],
