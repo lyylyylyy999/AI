@@ -13,13 +13,13 @@ def get_api_key(environ: Mapping[str, str]) -> str:
     try:
         api_key = environ[API_KEY_ENV_NAME]
     except KeyError:
-        raise ValueError(f"{API_KEY_ENV_NAME}错误")
-    if api_key is None or api_key.strip() == "":
-        raise ValueError(f"{API_KEY_ENV_NAME} 不存在或者为空")
+        raise ValueError(f"{API_KEY_ENV_NAME} 不存在")
+    if api_key.strip() == "":
+        raise ValueError(f"{API_KEY_ENV_NAME} 为空")
     return api_key
 
 
-def bulid_deepseek_client(
+def build_deepseek_client(
     api_key: str,
     transport: httpx.BaseTransport | None = None,
 ) -> httpx.Client:
@@ -38,6 +38,19 @@ def request_research_extraction(
 ) -> object:
     if abstract.strip() == "":
         raise ValueError("摘要不能为空")
-    response = client.post("/chat/completions", json={"abstract": abstract})
+    response = client.post(
+        CHAT_COMPLETIONS_PATH,
+        json={
+            "model": DEEPSEEK_MODEL,
+            "messages": [
+                {"role": "system", "content": "..."},
+                {"role": "user", "content": abstract},
+            ],
+            "response_format": {"type": "json_object"},
+            "thinking": {"type": "disabled"},
+            "stream": False,
+            "max_tokens": 1024,
+        },
+    )
     response.raise_for_status()
     return response.json()
