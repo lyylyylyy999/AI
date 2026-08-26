@@ -65,7 +65,7 @@ def test_valid_response_parser() -> None:
         "response",
         "choices_missing",
         "choices_type",
-        "choices_null",
+        "choices_empty",
         "choices[0]_type",
         "choices[0].message_missing",
         "choices[0].message_type",
