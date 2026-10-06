@@ -1,5 +1,5 @@
 import json
-from collections.abc import Iterable, Iterator
+from collections.abc import Generator, Iterable, Iterator
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -35,7 +35,7 @@ def parse_lines(lines: Iterable[str]) -> Iterator[Message]:
         yield message
 
 
-def read_jsonl(path: str | Path) -> Iterator[Message]:
+def read_jsonl(path: str | Path) -> Generator[Message, None, None]:
     """逐行读取 UTF-8 文件，迭代结束、发生异常或显式关闭时释放文件。"""
     with Path(path).open(encoding="utf-8") as stream:
         yield from parse_lines(stream)

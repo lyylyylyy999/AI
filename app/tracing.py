@@ -8,7 +8,10 @@ from pydantic import BaseModel, ConfigDict
 
 class TraceRecord(BaseModel):
     model_config = ConfigDict(
-        frozen=True, strict=True, extra="forbid", hide_input_in_errors=True,
+        frozen=True,
+        strict=True,
+        extra="forbid",
+        hide_input_in_errors=True,
     )
 
     request_name: str

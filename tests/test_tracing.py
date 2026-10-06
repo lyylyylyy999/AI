@@ -57,9 +57,7 @@ def test_abnormal_record() -> None:
         (123, ValueError, "request_name 只能是非空字符串类型"),
     ],
 )
-def test_invalid_request_name(
-    request_name: str, exception: type[Exception], match: str
-) -> None:
+def test_invalid_request_name(request_name: str, exception: type[Exception], match: str) -> None:
     sink = Mock()
     clock = Mock(side_effect=[10, 11])
     with pytest.raises(exception, match=match):
@@ -86,9 +84,7 @@ def test_same_instance_used_twice_sequentially() -> None:
     sink = Mock()
     clock = Mock(side_effect=[10, 11])
     trace = RequestTrace(request_name="test", sink=sink, clock=clock)
-    with pytest.raises(
-        RuntimeError, match="同一个请求追踪实例只能进入一次"
-    ):
+    with pytest.raises(RuntimeError, match="同一个请求追踪实例只能进入一次"):
         with trace:
             pass
         first_record = trace.record
@@ -104,9 +100,7 @@ def test_same_instance_used_nested() -> None:
     clock = Mock(side_effect=[10, 11])
     trace = RequestTrace(request_name="test", sink=sink, clock=clock)
     with (
-        pytest.raises(
-            RuntimeError, match="同一个请求追踪实例只能进入一次"
-        ),
+        pytest.raises(RuntimeError, match="同一个请求追踪实例只能进入一次"),
         trace,
         trace,
     ):
