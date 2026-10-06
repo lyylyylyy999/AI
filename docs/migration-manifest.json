@@ -1,0 +1,33 @@
+{
+  "source_head": "d695dd6e49c7c6124f79749aadac240b796340a5",
+  "files": [
+    {
+      "source": "exercises/task_001_jsonl_chat_log_analyzer/jsonl_chat_log_analyzer.py",
+      "target": "app/domain.py",
+      "source_sha256": "e3906f831408597c6b45160f7ab4713cf27da1f5e267d0fc94021cc30bd35b4f",
+      "target_sha256": "23b71cdfd22d9f2635e74920bb3d8423ec66227070a063473f6a256921a57e65",
+      "adapted": true
+    },
+    {
+      "source": "exercises/task_001_jsonl_chat_log_analyzer/jsonl_chat_log_analyzer.py",
+      "target": "app/jsonl.py",
+      "source_sha256": "e3906f831408597c6b45160f7ab4713cf27da1f5e267d0fc94021cc30bd35b4f",
+      "target_sha256": "2bbc048aad92fb2236cf70c2a1a2a1109b94c3ef8a235fc95f92df4205f74b91",
+      "adapted": true
+    },
+    {
+      "source": "exercises/task_004_request_trace/request_trace.py",
+      "target": "app/tracing.py",
+      "source_sha256": "a8519ab139545418421ab9b27b0ac2f8525aa986200ba07fc9ea39c30b3354bb",
+      "target_sha256": "563a716daebb7d3ff1f2450dc2a4c7f502d75b04c15fc39ef5c570649c394c15",
+      "adapted": true
+    },
+    {
+      "source": "tests/test_task_004/test_request_trace.py",
+      "target": "tests/test_tracing.py",
+      "source_sha256": "d70377399a27d21c7bcc0db7ad00289ef32dbe874b80f023efa4c34063c3cb83",
+      "target_sha256": "a03f58237615fe1f68c4db25b6c25ea698f2d007ade9160159df11bc8e243523",
+      "adapted": true
+    }
+  ]
+}
