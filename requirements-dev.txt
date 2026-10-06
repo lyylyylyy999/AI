@@ -1,5 +1,7 @@
 -r requirements.txt
 pytest==9.1.1
 httpx==0.28.1
+# 当前 FastAPI TestClient 使用的响应类型，用于接口测试与类型检查。
+httpx2==2.13.0
 ruff==0.16.8
 mypy==2.3.1

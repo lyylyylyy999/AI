@@ -3,8 +3,8 @@
 - 难度：L2
 - 预计有效编码时间：2–3小时；依赖准备、阅读与审查修改另计
 - 分支：main
-- 状态：待学习者实现
-- 审查基线：仓库尚无提交；首次提交后记录任务说明提交 SHA，此前检查全部新增文件
+- 状态：接口测试已编写，生产代码待修复后再审查
+- 审查基线：`d706a61ebc64d4a42dec5c283d02ea53403c3df4`；实现提交 `6150235a810a3ab34c9fb0191dc438db7f9b9550`
 - 已有基础：app/jsonl.py 的 parse_lines、app/domain.py 的 summarize 已完成并验证
 
 ## 背景
@@ -21,7 +21,7 @@
 
 阅读 FastAPI [文件上传](https://fastapi.tiangolo.com/tutorial/request-files/) 中 UploadFile 与同步处理方式，以及[错误处理](https://fastapi.tiangolo.com/tutorial/handling-errors/)。复习字节与 UTF-8 文本、生成器延迟失败、HTTP 200/413/422。
 
-执行前使用 `conda activate LLM`。当前该环境缺少 python-multipart；它是 multipart 文件上传需要的新增依赖。实施时在 LLM 中只安装该依赖，验证后固定版本到 requirements.txt，不升级现有包。本次任务设计尚未安装依赖。
+执行前使用 `conda activate LLM`。实现阶段已加入 python-multipart==0.0.32，当前环境与 requirements.txt 一致；不要重复安装或升级现有包。
 
 ## 功能要求
 

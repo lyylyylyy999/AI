@@ -69,7 +69,8 @@ def test_empty_input_produces_complete_zero_statistics(lines: list[str]) -> None
     ],
 )
 def test_invalid_record_has_physical_line_category_and_safe_traceback(
-    line: str, code: str,
+    line: str,
+    code: str,
 ) -> None:
     with pytest.raises(InvalidMessageError) as captured:
         list(parse_lines(iter(["\n", " \n", line])))
@@ -91,7 +92,8 @@ def test_invalid_record_has_physical_line_category_and_safe_traceback(
     ],
 )
 def test_direct_message_uses_pydantic_validation(
-    changes: dict[str, object], code: str,
+    changes: dict[str, object],
+    code: str,
 ) -> None:
     data: dict[str, object] = {"conversation_id": "a", "role": "user", "content": "内容"}
     data.update(changes)
@@ -156,7 +158,8 @@ def test_pydantic_json_roundtrip_preserves_content_and_statistics() -> None:
 
 @pytest.mark.parametrize("as_string", [True, False])
 def test_file_adapter_accepts_path_or_string_and_keeps_content(
-    tmp_path: Path, as_string: bool,
+    tmp_path: Path,
+    as_string: bool,
 ) -> None:
     path = tmp_path / "input.jsonl"
     path.write_text(record(content=" \r\n正文🙂  ") + "\n", encoding="utf-8")
@@ -176,7 +179,8 @@ def test_file_adapter_preserves_missing_and_encoding_errors(tmp_path: Path) -> N
 
 @pytest.mark.parametrize("exit_mode", ["exhaust", "failure", "close"])
 def test_file_closed_on_exhaustion_failure_and_explicit_close(
-    monkeypatch: pytest.MonkeyPatch, exit_mode: str,
+    monkeypatch: pytest.MonkeyPatch,
+    exit_mode: str,
 ) -> None:
     stream = StringIO(record() + "\n" + ("invalid\n" if exit_mode == "failure" else ""))
     monkeypatch.setattr(Path, "open", lambda *args, **kwargs: stream)
